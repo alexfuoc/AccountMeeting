@@ -35,6 +35,9 @@
         <label>Create Meeting</label>
         <locationX>176</locationX>
         <locationY>242</locationY>
+        <connector>
+            <targetReference>Get_Related_Contacts</targetReference>
+        </connector>
         <inputAssignments>
             <field>Account__c</field>
             <value>
@@ -62,6 +65,40 @@
         <object>Meeting__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordLookups>
+        <name>Get_Related_Contacts</name>
+        <label>Get Related Contacts</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Users</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Users</name>
+        <label>Get Users</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Select_Attendees</targetReference>
+        </connector>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <screens>
         <name>New_Meeting</name>
         <label>New Meeting</label>
@@ -115,6 +152,143 @@
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Select_Attendees</name>
+        <label>Select Attendees</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Select_Attendees_Label</name>
+            <fieldText>Select Attendees</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Select_Attendees_Label_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Internal_Attendees</name>
+                    <dataTypeMappings>
+                        <typeName>T</typeName>
+                        <typeValue>User</typeValue>
+                    </dataTypeMappings>
+                    <extensionName>flowruntime:datatable</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Internal Attendees (User)</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>selectionMode</name>
+                        <value>
+                            <stringValue>MULTI_SELECT</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>minRowSelection</name>
+                        <value>
+                            <numberValue>0.0</numberValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>tableData</name>
+                        <value>
+                            <elementReference>Get_Users</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>isShowSearchBar</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>columns</name>
+                        <value>
+                            <stringValue>[{&quot;apiName&quot;:&quot;Name&quot;,&quot;guid&quot;:&quot;column-9a51&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Full Name&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Email&quot;,&quot;guid&quot;:&quot;column-aee4&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:1,&quot;label&quot;:&quot;Email&quot;,&quot;type&quot;:&quot;email&quot;},{&quot;apiName&quot;:&quot;&quot;,&quot;guid&quot;:&quot;column-0105&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:1}]</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>shouldDisplayLabel</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <fields>
+                    <name>External_Attendees</name>
+                    <dataTypeMappings>
+                        <typeName>T</typeName>
+                        <typeValue>Contact</typeValue>
+                    </dataTypeMappings>
+                    <extensionName>flowruntime:datatable</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>External Attendees (Contact)</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>selectionMode</name>
+                        <value>
+                            <stringValue>MULTI_SELECT</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>minRowSelection</name>
+                        <value>
+                            <numberValue>0.0</numberValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>shouldDisplayLabel</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>tableData</name>
+                        <value>
+                            <elementReference>Get_Related_Contacts</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>isShowSearchBar</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>columns</name>
+                        <value>
+                            <stringValue>[{&quot;apiName&quot;:&quot;Name&quot;,&quot;guid&quot;:&quot;column-e0ba&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Full Name&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Email&quot;,&quot;guid&quot;:&quot;column-e631&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:1,&quot;label&quot;:&quot;Email&quot;,&quot;type&quot;:&quot;email&quot;}]</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>

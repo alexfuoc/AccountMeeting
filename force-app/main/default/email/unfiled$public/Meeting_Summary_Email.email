@@ -1,0 +1,12 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body style="height: auto; min-height: auto;">Attached below is the summary of the meeting from {!Meeting__c.Meeting_Date__c}.<br />
+<br />
+{!Meeting__c.Meeting_Notes__c}<br />
+<br />
+Best Regards,<br />
+{!User.Name}<br />
+{!User.Email}</body>
+</html>

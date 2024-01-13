@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Default email template for sending a summary of the Meeting</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Meeting Summary Email</name>
+    <style>none</style>
+    <subject>Meeting Summary - {!Meeting__c.Meeting_Date__c}</subject>
+    <textOnly>Attached below is the summary of the meeting from {!Meeting__c.Meeting_Date__c}.  
+
+{!Meeting__c.Meeting_Notes__c}  
+
+Best Regards, 
+{!User.Name} 
+{!User.Email}</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>
