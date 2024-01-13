@@ -11,6 +11,33 @@
     <environments>Default</environments>
     <interviewLabel>New Meeting {!$Flow.CurrentDateTime}</interviewLabel>
     <label>New Meeting</label>
+    <loops>
+        <description>Creates the external attendees from the contacts selected</description>
+        <name>Create_External_Attendees</name>
+        <label>Create External Attendees</label>
+        <locationX>176</locationX>
+        <locationY>974</locationY>
+        <collectionReference>External_Attendees.selectedRows</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Create_EA</targetReference>
+        </nextValueConnector>
+    </loops>
+    <loops>
+        <description>Loop through the internal attendees selected</description>
+        <name>Create_Internal_Attendees</name>
+        <label>Create Internal Attendees</label>
+        <locationX>176</locationX>
+        <locationY>674</locationY>
+        <collectionReference>Internal_Attendees.selectedRows</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Create_IA_Record</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Create_External_Attendees</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -30,6 +57,52 @@
         </value>
     </processMetadataValues>
     <processType>Flow</processType>
+    <recordCreates>
+        <name>Create_EA</name>
+        <label>Create EA</label>
+        <locationX>264</locationX>
+        <locationY>1082</locationY>
+        <connector>
+            <targetReference>Create_External_Attendees</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Attendee_Contact__c</field>
+            <value>
+                <elementReference>Create_External_Attendees.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Meeting__c</field>
+            <value>
+                <elementReference>Create_Meeting</elementReference>
+            </value>
+        </inputAssignments>
+        <object>External_Attendee__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_IA_Record</name>
+        <label>Create IA Record</label>
+        <locationX>264</locationX>
+        <locationY>782</locationY>
+        <connector>
+            <targetReference>Create_Internal_Attendees</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Attendee_User__c</field>
+            <value>
+                <elementReference>Create_Internal_Attendees.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Meeting__c</field>
+            <value>
+                <elementReference>Create_Meeting</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Internal_Attendee__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
     <recordCreates>
         <name>Create_Meeting</name>
         <label>Create Meeting</label>
@@ -164,6 +237,9 @@
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Create_Internal_Attendees</targetReference>
+        </connector>
         <fields>
             <name>Select_Attendees_Label</name>
             <fieldText>Select Attendees</fieldText>
